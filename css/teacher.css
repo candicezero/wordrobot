@@ -1,0 +1,2 @@
+/* 教师模式主题（基础样式在 app.css，此文件放教师端专属覆盖） */
+body[data-zone="teacher"] .card-title { color: var(--text); }

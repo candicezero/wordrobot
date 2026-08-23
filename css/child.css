@@ -1,0 +1,90 @@
+/* 孩子模式主题：更大更活泼 */
+body[data-zone="child"] { background: linear-gradient(180deg, #eaf2ff 0%, #f6f9ff 40%, #fdf6ec 100%); }
+body[data-zone="child"] #app-header {
+  background: rgba(240,246,255,.94);
+}
+
+.child-page { max-width: 560px; }
+
+.badge-wall { display: flex; gap: 8px; justify-content: space-around; text-align: center; padding: 18px 8px; }
+.badge-item { flex: 1; }
+.badge-emoji { font-size: 38px; line-height: 1.2; }
+.badge-num { font-size: 26px; font-weight: 800; color: var(--primary); }
+.badge-label { font-size: 12.5px; color: var(--text-sub); }
+
+.milestone-hint { text-align: center; font-size: 15px; color: #b8860b; font-weight: 700; padding: 2px 0 6px; }
+
+.btn-start {
+  background: linear-gradient(135deg, #ffb43b, #ff8a3b);
+  color: #fff; font-size: 24px; padding: 20px; border-radius: 20px;
+  box-shadow: 0 6px 18px rgba(255,150,60,.4);
+}
+
+.start-overlay { text-align: center; padding: 30px 8px 10px; display: flex; flex-direction: column; gap: 14px; align-items: center; }
+.start-emoji { font-size: 74px; }
+.start-title { font-size: 26px; font-weight: 800; }
+.start-sub { font-size: 15px; color: var(--text-sub); max-width: 420px; white-space: pre-line; }
+
+.dict-progress { display: flex; align-items: center; gap: 10px; justify-content: center; padding: 4px 0; }
+.dict-count { font-size: 22px; font-weight: 800; font-variant-numeric: tabular-nums; color: var(--primary); }
+.qtype-badge { font-size: 13px; font-weight: 700; border-radius: 999px; padding: 3px 12px; }
+.qtype-badge.c2e { background: #e3edff; color: #2b5fd9; }
+.qtype-badge.e2c { background: #fff0d9; color: #b06a00; }
+.asr-dot { opacity: .35; font-size: 16px; }
+.asr-dot.on { opacity: 1; animation: pulse 1.6s ease infinite; }
+@keyframes pulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.25); } }
+
+.question-card {
+  background: var(--card); border-radius: 22px; padding: 40px 22px;
+  text-align: center; box-shadow: 0 4px 16px rgba(40,70,140,.10);
+  font-size: 30px; font-weight: 800; line-height: 1.5; min-height: 180px;
+  display: flex; flex-direction: column; gap: 14px; justify-content: center;
+  word-break: break-word;
+}
+.question-card .zh { color: var(--text); }
+.question-card .en-word { color: #1d4ed8; letter-spacing: .5px; }
+.question-card .pos { font-size: 17px; color: var(--text-sub); font-weight: 600; }
+.blank-hint { font-size: 24px; color: #9aa4b2; letter-spacing: 2px; font-weight: 700; }
+
+.dict-btns { display: flex; gap: 10px; }
+.dict-btns .btn { flex: 1; }
+
+.done-card { text-align: center; padding: 34px 18px; display: flex; flex-direction: column; gap: 12px; align-items: center; }
+.done-emoji { font-size: 76px; animation: bounce 1.2s ease infinite; }
+@keyframes bounce { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
+.done-title { font-size: 24px; font-weight: 800; }
+.done-sub { font-size: 20px; color: #e07b00; font-weight: 700; }
+.done-detail { font-size: 14px; color: var(--text-sub); }
+
+/* 里程碑动画 */
+.milestone-overlay {
+  position: fixed; inset: 0; z-index: 300;
+  background: rgba(20,25,60,.72); backdrop-filter: blur(4px);
+  display: flex; align-items: center; justify-content: center;
+  animation: fadeIn .3s ease;
+}
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+.milestone-box {
+  background: linear-gradient(160deg, #fff8e8, #ffefd2);
+  border-radius: 26px; padding: 40px 36px; text-align: center;
+  animation: popIn .45s cubic-bezier(.2,1.4,.4,1);
+  box-shadow: 0 20px 60px rgba(0,0,0,.35);
+}
+@keyframes popIn { from { transform: scale(.4); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+.milestone-emoji { font-size: 84px; }
+.milestone-title { font-size: 28px; font-weight: 800; color: #b8860b; margin-top: 8px; }
+.milestone-num { font-size: 19px; font-weight: 700; color: var(--text); margin-top: 6px; }
+.confetti {
+  position: absolute; top: -40px; font-size: 26px;
+  animation: confettiFall 2.6s linear infinite;
+}
+@keyframes confettiFall {
+  from { transform: translateY(-40px) rotate(0deg); }
+  to { transform: translateY(105vh) rotate(320deg); }
+}
+.confetti.c0 { animation-duration: 2.2s; }
+.confetti.c1 { animation-duration: 2.8s; }
+.confetti.c2 { animation-duration: 2.5s; }
+.confetti.c3 { animation-duration: 3.1s; }
+.confetti.c4 { animation-duration: 2.4s; }
+.confetti.c5 { animation-duration: 2.9s; }

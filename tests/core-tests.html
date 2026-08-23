@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>WordRobot 核心逻辑测试</title>
+<style>
+body { font-family: -apple-system, "PingFang SC", sans-serif; max-width: 760px; margin: 20px auto; padding: 0 14px; }
+h1 { font-size: 20px; }
+#summary { font-size: 18px; font-weight: 800; margin: 12px 0; }
+.pass { color: #2f9e44; } .fail { color: #e5484d; font-weight: 700; }
+.case { padding: 6px 10px; border-bottom: 1px solid #e3e7ee; font-size: 14px; }
+pre { background: #f6f8fb; padding: 8px; border-radius: 8px; overflow: auto; }
+button { font-size: 16px; padding: 8px 18px; border-radius: 10px; border: none; background: #3b6ff5; color: #fff; }
+</style>
+</head>
+<body>
+<h1>WordRobot 核心逻辑测试（选词 / 权重 / 批改 / 勋章）</h1>
+<button onclick="location.reload()">重新运行</button>
+<div id="summary">运行中…</div>
+<div id="results"></div>
+
+<script src="../config.js"></script>
+<script src="../js/util.js"></script>
+<script src="../js/dictionary.js"></script>
+<script src="../js/selector.js"></script>
+<script src="../js/grading.js"></script>
+<script src="../js/reward.js"></script>
+<script src="core-tests.js"></script>
+</body>
+</html>
