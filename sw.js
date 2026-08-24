@@ -1,6 +1,6 @@
 /* Service Worker：App 壳 + 词典预缓存，首次联网加载后可完全离线。
    注意：每次发版修改文件后，把 CACHE 版本号 +1（如 wordrobot-v2）。 */
-const CACHE = 'wordrobot-v3';
+const CACHE = 'wordrobot-v4';
 const ASSETS = [
   './',
   './index.html',

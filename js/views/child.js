@@ -30,41 +30,15 @@ WR.views.childHome = function (app) {
     const libs = await WR.db.libraries.list();
     if (destroyFlag) return;
 
-    if (!students.length) {
-      wrap.appendChild(WR.ui.empty('还没有学生'));
-      wrap.appendChild(WR.util.el('button', {
-        class: 'btn btn-primary', text: '去添加学生',
-        onclick: function () { WR.router.nav('#/teacher/students'); }
-      }));
-      return;
-    }
     if (!libs.length) {
       wrap.appendChild(WR.ui.empty('还没有词库，请请爸爸妈妈先建词库'));
       return;
     }
 
-    let studentId = await WR.db.settings.get('child_student_id', null);
-    let student = students.find(function (s) { return s.id === studentId; }) || students[0];
+    /* 听写不绑定学生：一台 iPad 播放、多个孩子一起听写；
+       学生名单只在批改环节按张录入时才需要选择。 */
     let library = libs.find(function (l) { return l.id === childLibSelId; }) ||
       libs[0]; // list() 已按 updated_at 倒序 → 默认最近录入的词库
-
-    /* 学生选择 */
-    const stuCard = WR.util.el('div', { class: 'card' });
-    stuCard.appendChild(WR.util.el('div', { class: 'card-title small', text: '我是' }));
-    const chips = WR.util.el('div', { class: 'chip-row' });
-    students.forEach(function (s) {
-      chips.appendChild(WR.util.el('button', {
-        class: 'chip' + (s.id === student.id ? ' active' : ''),
-        text: s.name,
-        onclick: function () {
-          student = s;
-          WR.db.settings.set('child_student_id', s.id);
-          WR.router.refresh();
-        }
-      }));
-    });
-    stuCard.appendChild(chips);
-    wrap.appendChild(stuCard);
 
     /* 词库选择 */
     const libCard = WR.util.el('div', { class: 'card' });
@@ -83,8 +57,12 @@ WR.views.childHome = function (app) {
     libCard.appendChild(libList);
     wrap.appendChild(libCard);
 
-    /* 勋章墙 */
-    const counts = await WR.db.badges.countsByStudent(student.id);
+    /* 勋章墙（全体学生合计） */
+    let small = 0, big = 0;
+    for (const s of students) {
+      const c = await WR.db.badges.countsByStudent(s.id);
+      small += c.small; big += c.big;
+    }
     const masteredCount = await WR.db.mastered.countByLibrary(library.id);
     const pending = (await WR.db.milestones.listByLibrary(library.id)).filter(function (m) { return !m.shown_at; });
     const toNext = WR.reward.toNextMilestone(masteredCount, cfg.reward.milestone_step);
@@ -92,12 +70,12 @@ WR.views.childHome = function (app) {
     const wall = WR.util.el('div', { class: 'card badge-wall' });
     wall.appendChild(WR.util.el('div', { class: 'badge-item' }, [
       WR.util.el('div', { class: 'badge-emoji', text: '⭐' }),
-      WR.util.el('div', { class: 'badge-num', text: String(counts.small) }),
+      WR.util.el('div', { class: 'badge-num', text: String(small) }),
       WR.util.el('div', { class: 'badge-label', text: '小勋章' })
     ]));
     wall.appendChild(WR.util.el('div', { class: 'badge-item' }, [
       WR.util.el('div', { class: 'badge-emoji', text: '🏆' }),
-      WR.util.el('div', { class: 'badge-num', text: String(counts.big) }),
+      WR.util.el('div', { class: 'badge-num', text: String(big) }),
       WR.util.el('div', { class: 'badge-label', text: '大勋章' })
     ]));
     wall.appendChild(WR.util.el('div', { class: 'badge-item' }, [
