@@ -248,11 +248,72 @@ def _row_score(row: Dict[str, Any]) -> int:
     return (2 if row.get('phonetic') else 0) + (1 if row.get('meaning') else 0)
 
 
+# ---------------- 词典补丁（重建时保持生效） ----------------
+
+# PDF 完全未收录、需手工补录的词；未来 PDF 若收录则仅补空缺字段
+MANUAL_PATCHES: Dict[str, Dict[str, Any]] = {
+    'professional': {
+        'phonetic': "/prə'feʃənl/",
+        'meaning': 'adj. 专业的；职业的 n. 专业人员',
+        'starred': False,
+    },
+}
+
+
+def apply_alias_patches(word_map: Dict[str, Dict[str, Any]]) -> Dict[str, Dict[str, Any]]:
+    """为带括号注记的词头生成裸形式别名条目。
+
+    PDF 词头常带屈折/缩写注记，如 "have (had, had)"、"laboratory(lab)"、"toward(s)"，
+    教师直接录入裸形式（have/laboratory/toward）会查不到。规则：
+    - 去掉第一个 "(" 起的注记 → 裸形式别名（have、laboratory、manner、teach…）
+    - 以 "(s)" 结尾 → 追加复数形式别名（towards、manners）
+    - 括号内为纯字母缩写（lab/mr/tv）→ 追加缩写别名
+    仅在别名不存在时新增，不覆盖词典已有条目。
+    """
+    aliases: Dict[str, Dict[str, Any]] = {}
+    for key, entry in word_map.items():
+        if '(' not in key:
+            continue
+        base = key.split('(', 1)[0].strip().lower()
+        if not base:
+            continue
+        candidates = [base]
+        if key.rstrip().endswith('(s)'):
+            candidates.append(base + 's')
+        inner = key.split('(', 1)[1].rstrip(')').strip()
+        if inner.isalpha() and len(inner) >= 2 and inner != 's':
+            candidates.append(inner.lower())
+        for cand in candidates:
+            if cand not in word_map and cand not in aliases:
+                aliases[cand] = entry
+    for cand, entry in aliases.items():
+        word_map[cand] = dict(entry)
+    return word_map
+
+
+def apply_manual_patches(word_map: Dict[str, Dict[str, Any]]) -> Dict[str, Dict[str, Any]]:
+    """手工补录 PDF 未收录的词（pdf_index=-1 标记非 PDF 来源）。"""
+    for word, patch in MANUAL_PATCHES.items():
+        cur = word_map.get(word)
+        if cur is None:
+            word_map[word] = {
+                'phonetic': patch['phonetic'],
+                'meaning': patch['meaning'],
+                'starred': bool(patch.get('starred', False)),
+                'pdf_index': -1,
+            }
+        else:
+            for field in ('phonetic', 'meaning'):
+                if not cur.get(field) and patch.get(field):
+                    cur[field] = patch[field]
+    return word_map
+
+
 def validate(word_map: Dict[str, Dict[str, Any]]) -> Dict[str, Any]:
     no_meaning = [w for w, r in word_map.items() if not r['meaning'].strip()]
     no_phonetic = [w for w, r in word_map.items() if not r['phonetic'].strip()]
     starred = [w for w, r in word_map.items() if r['starred']]
-    samples = {w: word_map.get(w) for w in ('ability', 'about', 'laboratory', 'cafe', 'café', 'january')}
+    samples = {w: word_map.get(w) for w in ('ability', 'about', 'laboratory', 'manner', 'professional', 'have', 'cafe', 'café', 'january')}
     return {
         'total_entries': len(word_map),
         'starred_count': len(starred),
@@ -274,6 +335,8 @@ def main() -> None:
     dump = args.dump if str(args.dump) else None
     text = extract_pdf_text(args.pdf, dump)
     word_map = build_word_map(text, args.part2_marker)
+    word_map = apply_alias_patches(word_map)
+    word_map = apply_manual_patches(word_map)
 
     args.out.parent.mkdir(parents=True, exist_ok=True)
     payload = json.dumps(word_map, ensure_ascii=False, separators=(',', ':'))
