@@ -30,10 +30,21 @@ WR.views.home = function (app) {
       ])]);
   wrap.appendChild(childBtn);
 
-  wrap.appendChild(WR.util.el('a', {
+  const links = WR.util.el('div', { class: 'home-links' });
+  const gradeLink = WR.util.el('a', {
+    class: 'home-link', text: '听写批改', href: '#/teacher/sessions',
+    onclick: function (e) { e.preventDefault(); WR.router.nav('#/teacher/sessions'); }
+  });
+  links.appendChild(gradeLink);
+  links.appendChild(WR.util.el('a', {
     class: 'home-link', text: '学生与勋章', href: '#/teacher/students',
     onclick: function (e) { e.preventDefault(); WR.router.nav('#/teacher/students'); }
   }));
+  links.appendChild(WR.util.el('a', {
+    class: 'home-link', text: '设置', href: '#/teacher/settings',
+    onclick: function (e) { e.preventDefault(); WR.router.nav('#/teacher/settings'); }
+  }));
+  wrap.appendChild(links);
 
   app.appendChild(wrap);
 
@@ -44,4 +55,17 @@ WR.views.home = function (app) {
       teacherBtn.appendChild(badge);
     }
   });
+
+  /* 批改入口角标：还没有任何批改记录的听写任务数 */
+  (async function () {
+    const sessions = await WR.db.sessions.listDesc();
+    let ungraded = 0;
+    for (const se of sessions) {
+      const grads = await WR.db.gradings.bySession(se.id);
+      if (!grads.length) ungraded++;
+    }
+    if (ungraded) {
+      gradeLink.appendChild(WR.util.el('span', { class: 'home-badge', text: String(ungraded) }));
+    }
+  })();
 };

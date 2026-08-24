@@ -332,6 +332,12 @@ WR.views.childDone = function (app, params) {
       onclick: function () { WR.router.nav('#/child'); }
     }));
 
+    /* 老师拿回 iPad 后从这里直达本次批改 */
+    wrap.appendChild(WR.util.el('button', {
+      class: 'btn btn-secondary btn-big', text: '老师批改 ➜',
+      onclick: function () { WR.router.nav('#/teacher/grading/' + session.ts_name); }
+    }));
+
     /* 里程碑动画（每个只播一次） */
     if (pending.length) playMilestones(pending);
   })();

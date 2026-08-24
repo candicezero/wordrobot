@@ -208,3 +208,42 @@ main { padding: 14px 14px calc(24px + var(--safe-bottom)); max-width: 720px; mar
 }
 @keyframes spin { to { transform: rotate(360deg); } }
 .empty { text-align: center; color: var(--text-sub); padding: 22px 0; }
+
+/* 首页（教师/孩子两个入口） */
+.home-wrap {
+  display: flex; flex-direction: column; align-items: center;
+  gap: 14px; padding: 28px 4px 10px;
+}
+.home-logo { font-size: 54px; line-height: 1; }
+.home-title { font-size: 26px; font-weight: 800; margin: 0; }
+.home-sub { color: var(--text-sub); margin: 0 0 8px; }
+.home-card {
+  position: relative;
+  display: flex; align-items: center; gap: 14px; width: 100%;
+  border: none; border-radius: 18px; padding: 18px 16px;
+  cursor: pointer; text-align: left; font-size: 16px;
+  box-shadow: 0 2px 8px rgba(20,30,50,.08);
+  transition: transform .06s ease;
+}
+.home-card:active { transform: scale(.98); }
+.home-card-icon { font-size: 34px; line-height: 1; }
+.home-card-text { flex: 1; min-width: 0; }
+.home-card-title { font-size: 18px; font-weight: 700; }
+.home-card-desc { font-size: 13px; opacity: .75; margin-top: 2px; }
+.teacher-card { background: #eef3ff; color: var(--primary-dark); }
+.child-card { background: #fff3e2; color: #8a5300; }
+.home-links { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; margin-top: 4px; }
+.home-link {
+  position: relative;
+  color: var(--primary); text-decoration: none;
+  font-size: 14.5px; font-weight: 600;
+  padding: 8px 15px; border-radius: 999px; background: var(--card);
+  box-shadow: 0 1px 3px rgba(20,30,50,.07);
+}
+.home-badge {
+  position: absolute; top: -7px; right: -5px;
+  background: var(--danger); color: #fff; border-radius: 999px;
+  min-width: 20px; height: 20px; line-height: 20px; text-align: center;
+  font-size: 12px; font-weight: 700; padding: 0 5px;
+  box-shadow: 0 0 0 2px var(--card);
+}

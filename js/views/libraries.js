@@ -3,7 +3,10 @@ WR.views = WR.views || {};
 
 WR.views.libraries = function (app) {
   WR.ui.zone('teacher');
-  WR.ui.header({ title: '词库管理', back: '#/home' });
+  WR.ui.header({
+    title: '词库管理', back: '#/home',
+    actions: [{ text: '批改', onclick: function () { WR.router.nav('#/teacher/sessions'); } }]
+  });
 
   const wrap = WR.util.el('div', { class: 'page' });
 
