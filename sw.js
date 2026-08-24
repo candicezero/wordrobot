@@ -1,6 +1,6 @@
 /* Service Worker：App 壳 + 词典预缓存，首次联网加载后可完全离线。
    注意：每次发版修改文件后，把 CACHE 版本号 +1（如 wordrobot-v2）。 */
-const CACHE = 'wordrobot-v2';
+const CACHE = 'wordrobot-v3';
 const ASSETS = [
   './',
   './index.html',
@@ -29,6 +29,7 @@ const ASSETS = [
   './js/views/child.js',
   './js/app.js',
   './assets/dictionary.json',
+  './assets/wordlists/summer-review.txt',
   './assets/icons/icon-192.png',
   './assets/icons/icon-512.png',
   './assets/icons/icon-180.png',
